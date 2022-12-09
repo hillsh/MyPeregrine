@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Edit Daily Log</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+    <ion-card-content>
+      <form *ngIf="(visibleActivities$ | async).length > 0; else noSettings" [formGroup]="logForm">
+
+        <ion-list>
+          <ion-item>
+            <ion-label>Log Date</ion-label>
+            <ion-datetime
+              formControlName="date"
+              type="date"
+              displayFormat="MMM DD YYYY"
+              (ionChange)="handleDateChange($event.target.value)"
+            ></ion-datetime>
+          </ion-item>
+
+          <ion-item *ngFor="let activity of visibleActivities$ | async">
+            <ion-label>{{ activity.name }}</ion-label>
+            <ion-input
+              class="ion-text-right"
+              [formControlName]="activity.id"
+              type="number"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Notes:</ion-label>
+            <ion-textarea autoGrow="true" formControlName="notes"></ion-textarea>
+          </ion-item>
+        </ion-list>
+      </form>
+
+      <section>
+        <ion-button size="large" expand="block" (click)="onSubmitUpdateLog()">
+          Confirm Daily Log Edit
+        </ion-button>
+        <ion-button size="small" expand="block" color="danger" (click)="onSubmitDeleteLog()">
+          Delete this Log
+        </ion-button>
+      </section>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ng-template #noSettings>
+  <ion-item>
+    <div style="color: red">
+      No activities have been activated in the app settings. The app will not function properly.
+    </div>
+  </ion-item>
+</ng-template>

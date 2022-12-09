@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="saveSettingsToast()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="isLoaded" padding>
+  <ion-card>
+    <ion-card-content>
+      Enable the activities that you will be using in your daily log upload.
+      <ion-list>
+
+        <ng-container *ngIf="settingsList$ | async as settingsList">
+          <form [formGroup]="settingsForm">
+            <ion-item *ngFor="let setting of settingsList">
+              <ion-label>{{ setting.name }}</ion-label>
+              <ion-toggle [formControlName]="setting.id"></ion-toggle>
+            </ion-item>
+          </form>
+        </ng-container>
+
+      </ion-list>
+      <ion-button size="large" expand="block" (click)="saveSettingsToast()">
+        Save Settings
+      </ion-button>
+      <ion-button size="small" expand="block" color="danger" (click)="onSubmitClearStorage()">
+        Clear Settings
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
